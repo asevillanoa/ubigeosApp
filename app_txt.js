@@ -11,13 +11,17 @@ http.createServer(function (request, response) {
    // Setea Status Code y tipo de contenido a la respuesta
    response.writeHead(200, {'Content-Type': 'text/html'});   
 
-   fs.readFile('./ubigeos.json',function(err,data){
+   fs.readFile('./ubigeos.txt',function(err,data){
    		if(err){
 				console.log(err);
 				response.end('Server Error');
 			}else{
-				// Almacena los datos del JSON en un arreglo
-				var datos = JSON.parse(data.toString()); 
+				//Guardando lineas del texto en un arreglo
+				var datos = data.toString().split('\n');
+				//Eliminando caracteres innecesarios: “ ”\r
+				for (var i=0; i<datos.length; i++){
+					datos[i] = datos[i].replace(/[“”\r]/g,'');
+				}
 				
 				console.log(datos);
 				departamentos = util.obtieneDepartamentos(datos);
